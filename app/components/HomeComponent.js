@@ -20,7 +20,7 @@ function Box(props){
 }
 
 function HomeComponent(props){
-
+	console.log(props)
 	return(
 		<div className='row'>
 			{props.data.boxIdx.map(function(state){

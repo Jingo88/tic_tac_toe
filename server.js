@@ -10,6 +10,12 @@ var compiler = webpack(webpackConfig);
 
 var port = 8000;
 
+var board = [
+				[0,0,0],
+				[0,0,0],
+				[0,0,0]
+			];
+
 app.use(function(req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader('Cache-Control', 'no-cache');
@@ -23,6 +29,10 @@ app.use(require('webpack-dev-middleware')(compiler, {
 }));
 
 app.use(require('webpack-hot-middleware')(compiler));
+
+app.get('/start', function(req,res){
+	res.json(board)
+})
 
 app.get('*', function(req,res){
 	res.sendFile(path.resolve(__dirname, 'app', 'index.html'))
