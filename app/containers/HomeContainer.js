@@ -1,7 +1,7 @@
 import React from 'react';
 
 import HomeComponent from '../components/HomeComponent';
-import {start} from '../helpers/helpers';
+import {start, userMove} from '../helpers/helpers';
 
 const HomeContainer = React.createClass({
 	getInitialState(){
@@ -28,19 +28,21 @@ const HomeContainer = React.createClass({
 		let userChoice = moveSplit.map(function(x){return parseInt(x)})
 		
 		if (board[userChoice[0]][userChoice[1]] === 0){
-			let newBoxIdx = boxIdx;
-			newBoxIdx[moveIdx] = playerTurn === 1 ? "X" : "Y";
+			userMove("================================================================================================")
+				.then(function(data){
+					console.log('COMPLETEEEEDDDDD')
+				})
+			// let newBoxIdx = boxIdx;
+			// newBoxIdx[moveIdx] = playerTurn === 1 ? "X" : "Y";
 
-			let newBoard = board
-			newBoard[userChoice[0]][userChoice[1]] = playerTurn === 1 ? 1 : 2
+			// let newBoard = board
+			// newBoard[userChoice[0]][userChoice[1]] = playerTurn === 1 ? 1 : 2
 
-			this.setState({
-				board: newBoard,
-				playerTurn: playerTurn === 1 ? 2 : 1,
-				boxIdx: newBoxIdx
-			})
-
-			this.setState({})
+			// this.setState({
+			// 	board: newBoard,
+			// 	playerTurn: playerTurn === 1 ? 2 : 1,
+			// 	boxIdx: newBoxIdx
+			// })
 		}
 	},
 	render(){
