@@ -16,6 +16,7 @@ app.use(function(req, res, next) {
   next();
 });
 
+//automatically run webpack when files are updated
 app.use(require('webpack-dev-middleware')(compiler, {
 	noInfo: true, 
 	publicPath: webpackConfig.output.publicPath
