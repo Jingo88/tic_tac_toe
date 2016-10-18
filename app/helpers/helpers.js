@@ -23,17 +23,34 @@ function userMove(move, newBoxIdx){
 function checkWin(board, player){
 	let boardLen = board.length;
 	let total;
-	let x;
+	let rowCheck;
+	let colCheck;
+	let diagCheck;
+
 	console.log(board)
 
 	board.map(function(row){
-		// total = row.reduce(function(prev, curr){ return prev + curr})
-		
-		
-		total = row.reduce((p,c) => p+c);
-		x = total === player*boardLen
+		rowCheck = row.every(function(current){
+			return current === player
+		})
 	})
-	return x
+
+	for (var i = 0; i<boardLen; ++i){
+		let tempArr = [];
+		for (var c = 0; c<boardLen; ++c){
+			tempArr.push(board[i][c]);
+		}
+		colCheck = tempArr.every(function(current){
+			return current === player
+		})
+	}
+
+	if (rowCheck || colCheck){
+		return true
+	} else {
+		return false
+	}
+	
 }
 
 module.exports = {
