@@ -31,9 +31,10 @@ const HomeContainer = React.createClass({
 		let moveIdx = boxIdx.indexOf(moveId);
 		let moveSplit = moveId.split("");
 		let userC = moveSplit.map(function(x){return parseInt(x)});
-		console.log(board)
+		
+
 		if (board[userC[0]][userC[1]] === 0){
-			console.log('WE JUST CLICKED SHIT')
+			
 			let newBoxIdx = boxIdx;
 			newBoxIdx[moveIdx] = "X"
 
@@ -45,6 +46,12 @@ const HomeContainer = React.createClass({
 					})
 				}.bind(this))
 		}
+	},
+	shouldComponentUpdate(){
+		return true;
+	},
+	componentWillUpdate(){
+
 	},
 	render(){
 		return (

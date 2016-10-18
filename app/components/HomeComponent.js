@@ -15,12 +15,13 @@ function Box(props){
 			id = {props.idx}
 			style={styles.box}
 			onClick = {props.onUserMove}>
-			<h1>{(props.idx === "X" || props.idx === "Y") ? props.idx : " "}</h1>
+			<h1>{(props.idx === "X" || props.idx === "O") ? props.idx : " "}</h1>
 		</div>
 	)
 }
 
 function HomeComponent(props){
+	console.log(props.data.boxIdx)
 	return(
 		<div className='row'>
 			{props.data.boxIdx.map(function(state){

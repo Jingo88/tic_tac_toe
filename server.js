@@ -44,12 +44,14 @@ var data = {
 var randomMove = function(arr){
 	
 	var idx = Math.floor(Math.random() * 9)
-
-	if (arr[idx] !== "X" && arr[idx] !== "Y"){
+	if (arr[idx] !== "X" && arr[idx] !== "O"){
 		var move = arr[idx];
 		var moveSplit = move.split("");
 		var computerMove = moveSplit.map(function(x){return parseInt(x)});
-		return computerMove;
+		return {
+			"computerMove": computerMove,
+			"idx": idx
+		}
 
 	} else {
 		return randomMove(arr);
@@ -61,13 +63,14 @@ var randomMove = function(arr){
 app.post('/move',function(req,res){
 	var user = req.body.move;
 	var newBoxIdx = req.body.newBoxIdx;
-	console.log('YOU GOT THE POST')
 	data.board[user[0]][user[1]] = 1;
 	data.boxIdx = newBoxIdx;
+	var move = randomMove(newBoxIdx);
+	var compMove = move["computerMove"]
 
-	var compMove = randomMove(newBoxIdx);
 	data.board[compMove[0]][compMove[1]] = 2;
 
+	data.boxIdx[move['idx']] = "O"
 
 	res.json(data)
 })
