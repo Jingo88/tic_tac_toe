@@ -7,13 +7,16 @@ function start(){
 		})
 }
 
-function userMove(move){
+function userMove(move, newBoxIdx){
 	return axios.post('http://localhost:8000/move',
-			{move: move}
+			{
+				move: move,
+				newBoxIdx: newBoxIdx
+			}
 		)
 		.then(function(data){
-			console.log('WE ARE IN USER MOVEEEE')
-			console.log(data)
+			return data.data
+			
 		})
 }
 

@@ -11,12 +11,6 @@ var compiler = webpack(webpackConfig);
 
 var port = 8000;
 
-var board = [
-				[0,0,0],
-				[0,0,0],
-				[0,0,0]
-			];
-
 //Cors 
 app.use(function(req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -33,18 +27,53 @@ app.use(require('webpack-dev-middleware')(compiler, {
 	noInfo: true, 
 	publicPath: webpackConfig.output.publicPath
 }));
-
 app.use(require('webpack-hot-middleware')(compiler));
 
+
+
+// create board
+var data = {
+	board : [
+				[0,0,0],
+				[0,0,0],
+				[0,0,0]
+			],
+	boxIdx:["00","01",'02','10','11','12','20','21','22']
+}
+
+var randomMove = function(arr){
+	
+	var idx = Math.floor(Math.random() * 9)
+
+	if (arr[idx] !== "X" && arr[idx] !== "Y"){
+		var move = arr[idx];
+		var moveSplit = move.split("");
+		var computerMove = moveSplit.map(function(x){return parseInt(x)});
+		return computerMove;
+
+	} else {
+		return randomMove(arr);
+	}
+
+}
+
+//ROUTES
 app.post('/move',function(req,res){
-	// console.log(req) 
-	console.log(req.body)
-	// console.log(req.get('move'))
-	res.json(board)
+	var user = req.body.move;
+	var newBoxIdx = req.body.newBoxIdx;
+	console.log('YOU GOT THE POST')
+	data.board[user[0]][user[1]] = 1;
+	data.boxIdx = newBoxIdx;
+
+	var compMove = randomMove(newBoxIdx);
+	data.board[compMove[0]][compMove[1]] = 2;
+
+
+	res.json(data)
 })
 
 app.get('/start', function(req,res){
-	res.json(board)
+	res.json(data)
 })
 
 app.get('*', function(req,res){
