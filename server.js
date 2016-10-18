@@ -63,6 +63,7 @@ var randomMove = function(arr){
 app.post('/move',function(req,res){
 	var user = req.body.move;
 	var newBoxIdx = req.body.newBoxIdx;
+	
 	data.board[user[0]][user[1]] = 1;
 	data.boxIdx = newBoxIdx;
 	var move = randomMove(newBoxIdx);

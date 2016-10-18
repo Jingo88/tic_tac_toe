@@ -6,62 +6,24 @@ import {start, userMove, checkWin} from '../helpers/helpers';
 const HomeContainer = React.createClass({
 	getInitialState(){
 		return {
-			board: [],
-			playerTurn: 1,
-			boxIdx: []
+			userAction: null
 		}
 	},
-	componentWillMount(){
-		this.getBoard()
+	handleUserChoice(event){
+		console.log(event.target.name);
+		this.setState({userAction: event.target.name})
 	},
-	getBoard(){
-		start()
-			.then(function(data){
-				this.setState({
-					board: data.board,
-					boxIdx: data.boxIdx
-				})
-			}.bind(this))
-	},
-	handleUserMove(event){
-		const {playerTurn, board, boxIdx} = this.state;
-		
-
-		let moveId = event.target.id;
-		let moveIdx = boxIdx.indexOf(moveId);
-		let moveSplit = moveId.split("");
-		let userC = moveSplit.map(function(x){return parseInt(x)});
-		
-
-		if (board[userC[0]][userC[1]] === 0){
-			
-			let newBoxIdx = boxIdx;
-			newBoxIdx[moveIdx] = "X"
-
-			board[userC[0]][userC[1]] = 1
-
-			console.log(checkWin(board,1))
-			if (checkWin(board, 1)){
-				console.log("WE WONNNNN")
-			} else {
-				console.log("KEEP GOING")
-			}
-
-
-			userMove(userC, newBoxIdx)
-				.then(function(data){
-					this.setState({
-						board: data.board,
-						boxIdx: data.boxIdx
-					})
-				}.bind(this))
-		}
+	handleUserSubmit(event){
+		event.preventDefault()
+		let username = event.target.children[0].value;
+		let password = event.target.children[1].value;
 	},
 	render(){
 		return (
 			<HomeComponent 
-				data={this.state}
-				onUserMove={this.handleUserMove}/>
+				data={this.state.userAction} 
+				onUserChoice = {this.handleUserChoice}
+				onUserSubmit = {this.handleUserSubmit}/>
 		)
 	}
 })

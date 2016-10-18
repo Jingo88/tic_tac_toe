@@ -7,28 +7,36 @@ var styles = {
 	}
 }
 
-function Box(props){
-
+function Options(props){
 	return(
-		<div 
-			className = "col s4"
-			id = {props.idx}
-			style={styles.box}
-			onClick = {props.onUserMove}>
-			<h1>{(props.idx === "X" || props.idx === "O") ? props.idx : " "}</h1>
+		<div>
+			<button onClick = {props.onUserChoice} name="Login">Login</button>
+			<button onClick = {props.onUserChoice} name="Register">Register</button>
+		</div>
+	)
+}
+
+function UserInput(props){
+	return(
+		<div>
+			<form onSubmit = {props.onUserSubmit}>
+				<input type="text" placeholder="Enter Your Username" data="username"/>
+				<input type="text" placeholder="Enter Your Password" data="password"/>
+				<input type="submit"/>
+			</form>
+			<button>Cancel</button>
 		</div>
 	)
 }
 
 function HomeComponent(props){
+	console.log(props)
 	return(
-		<div className='row'>
-			{props.data.boxIdx.map(function(state){
-				return <Box 
-					idx={state} 
-					onUserMove={props.onUserMove}/>
-			})}
+		<div className="row">
+			{props.data === null ? <Options onUserChoice ={props.onUserChoice}/> : 
+				<UserInput onUserSubmit = {props.onUserSubmit}/>}
 		</div>
+	
 	)
 }
 
