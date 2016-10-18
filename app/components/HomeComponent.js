@@ -21,7 +21,6 @@ function Box(props){
 }
 
 function HomeComponent(props){
-	console.log(props.data.boxIdx)
 	return(
 		<div className='row'>
 			{props.data.boxIdx.map(function(state){

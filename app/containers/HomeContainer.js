@@ -1,7 +1,7 @@
 import React from 'react';
 
 import HomeComponent from '../components/HomeComponent';
-import {start, userMove} from '../helpers/helpers';
+import {start, userMove, checkWin} from '../helpers/helpers';
 
 const HomeContainer = React.createClass({
 	getInitialState(){
@@ -38,6 +38,16 @@ const HomeContainer = React.createClass({
 			let newBoxIdx = boxIdx;
 			newBoxIdx[moveIdx] = "X"
 
+			board[userC[0]][userC[1]] = 1
+
+			console.log(checkWin(board,1))
+			if (checkWin(board, 1)){
+				console.log("WE WONNNNN")
+			} else {
+				console.log("KEEP GOING")
+			}
+
+
 			userMove(userC, newBoxIdx)
 				.then(function(data){
 					this.setState({
@@ -46,12 +56,6 @@ const HomeContainer = React.createClass({
 					})
 				}.bind(this))
 		}
-	},
-	shouldComponentUpdate(){
-		return true;
-	},
-	componentWillUpdate(){
-
 	},
 	render(){
 		return (

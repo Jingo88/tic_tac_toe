@@ -20,7 +20,24 @@ function userMove(move, newBoxIdx){
 		})
 }
 
+function checkWin(board, player){
+	let boardLen = board.length;
+	let total;
+	let x;
+	console.log(board)
+
+	board.map(function(row){
+		// total = row.reduce(function(prev, curr){ return prev + curr})
+		
+		
+		total = row.reduce((p,c) => p+c);
+		x = total === player*boardLen
+	})
+	return x
+}
+
 module.exports = {
 	start: start,
-	userMove: userMove
+	userMove: userMove,
+	checkWin: checkWin
 }
