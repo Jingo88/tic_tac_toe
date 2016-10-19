@@ -1,7 +1,7 @@
 import React from 'react';
 
 import HomeComponent from '../components/HomeComponent';
-import {start, userMove, checkWin, login} from '../helpers/helpers';
+import {login} from '../helpers/helpers';
 
 const HomeContainer = React.createClass({
 	contextTypes:{

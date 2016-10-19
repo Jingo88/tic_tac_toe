@@ -1,6 +1,7 @@
 import React from 'react';
 
-import GameComponent from '../components/GameComponent';
+import GameBoard from '../components/GameBoard';
+import GameMenu from '../components/GameMenu';
 import {start, userMove, checkWin} from '../helpers/helpers';
 
 const GameContainer = React.createClass({
@@ -8,7 +9,10 @@ const GameContainer = React.createClass({
 		return {
 			board: [],
 			playerTurn: 1,
-			boxIdx: []
+			boxIdx: [],
+			start: false,
+			reset: false,
+			end: false
 		}
 	},
 	componentWillMount(){
@@ -54,11 +58,30 @@ const GameContainer = React.createClass({
 				}.bind(this))
 		}
 	},
+	handleStart(event){
+		console.log('you clicked it!!!')
+		this.setState({start: true})
+	},
+	handleReset(event){
+
+	},
+	handleEnd(event){
+
+	},
 	render(){
+		console.log("RENDERING GAME CONTAINER")
 		return (
-			<GameComponent 
+			<div>
+				{this.state.start === true ? <GameBoard
 				data={this.state}
 				onUserMove={this.handleUserMove}/>
+				: <h1>Tic Tac Toe</h1>}
+				<GameMenu
+					onStart = {this.handleStart}
+					onReset = {this.handleReset}
+					onEnd = {this.handleEnd}/> 
+			</div>
+			
 		)
 	}
 })
