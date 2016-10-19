@@ -30,7 +30,6 @@ function UserInput(props){
 }
 
 function HomeComponent(props){
-	console.log(props)
 	return(
 		<div className="row">
 			{props.data === null ? <Options onUserChoice ={props.onUserChoice}/> : 

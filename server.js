@@ -2,11 +2,13 @@ var express = require('express');
 var path = require('path');
 var app = express();
 var bodyParser = require('body-parser');
+
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('ttt.db');
+
 var webpack = require('webpack');
 var webpackConfig = require('./webpack.config.js');
-
 var defaultPath = path.join(path.resolve('.'), '/app/index.html');
-
 var compiler = webpack(webpackConfig);
 
 var port = 8000;
@@ -74,6 +76,27 @@ app.post('/move',function(req,res){
 	data.boxIdx[move['idx']] = "O"
 
 	res.json(data)
+})
+
+app.post('/login', function(req, res){
+	var username = req.body.username;
+	var password = req.body.password;
+	console.log(username);
+	console.log(password);
+	
+	db.get('SELECT * FROM users WHERE username = ?', username,
+		function(err, row){
+			console.log(row)
+			if (err) {throw err;}
+
+			if (row){
+				return row.password === password ? res.json(true) : res.json(false)
+			} 
+		})
+})
+
+app.post('/register', function(req, res){
+
 })
 
 app.get('/start', function(req,res){

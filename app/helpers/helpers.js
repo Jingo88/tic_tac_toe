@@ -1,5 +1,17 @@
 var axios = require('axios');
 
+function login(un, pw){
+	return axios.post('http://localhost:8000/login',
+		{
+			username: un,
+			password: pw
+		}
+	).then(function(data){
+		console.log(data)
+		return data.data
+	})
+}
+
 function start(){
 	return axios.get('http://localhost:8000/start')
 		.then(function(board){
@@ -56,5 +68,6 @@ function checkWin(board, player){
 module.exports = {
 	start: start,
 	userMove: userMove,
-	checkWin: checkWin
+	checkWin: checkWin,
+	login: login
 }
