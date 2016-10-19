@@ -19,14 +19,14 @@ const HomeContainer = React.createClass({
 		event.preventDefault()
 		let username = event.target.children[0].value;
 		let password = event.target.children[1].value;
-		console.log(username)
-		console.log(password)
 		if (this.state.userAction === "Login"){
 			login(username, password)
 				.then(function(data){
-					if (data === true){
+					if (data.success === true){
+						let userId = data.info["id"]
 						this.context.router.push({
-							pathname: '/game'
+							pathname: '/game',
+							query: {userId}
 						})
 					} else {
 						console.log('WE HAVE TO BUILD SOMETHING TO TELL THE USER THEIR LOGIN INFO IS WRONG')

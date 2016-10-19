@@ -7,7 +7,6 @@ function login(un, pw){
 			password: pw
 		}
 	).then(function(data){
-		console.log(data)
 		return data.data
 	})
 }

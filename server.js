@@ -90,7 +90,17 @@ app.post('/login', function(req, res){
 			if (err) {throw err;}
 
 			if (row){
-				return row.password === password ? res.json(true) : res.json(false)
+				if (row.password === password){
+					res.json({
+						success: true,
+						info: row
+					})
+				} else {
+					res.json({
+						success:false,
+						info: null
+					})
+				}
 			} 
 		})
 })

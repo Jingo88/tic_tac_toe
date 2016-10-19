@@ -7,26 +7,31 @@ import {start, userMove, checkWin} from '../helpers/helpers';
 const GameContainer = React.createClass({
 	getInitialState(){
 		return {
-			board: [],
+			userID : this.props.location.query.userId,
+			board : [
+						[0,0,0],
+						[0,0,0],
+						[0,0,0]
+					],
+			boxIdx:["00","01",'02','10','11','12','20','21','22'],
 			playerTurn: 1,
-			boxIdx: [],
 			start: false,
 			reset: false,
 			end: false
 		}
 	},
-	componentWillMount(){
-		this.getBoard()
-	},
-	getBoard(){
-		start()
-			.then(function(data){
-				this.setState({
-					board: data.board,
-					boxIdx: data.boxIdx
-				})
-			}.bind(this))
-	},
+	// componentWillMount(){
+	// 	this.getBoard()
+	// },
+	// getBoard(){
+	// 	start()
+	// 		.then(function(data){
+	// 			this.setState({
+	// 				board: data.board,
+	// 				boxIdx: data.boxIdx
+	// 			})
+	// 		}.bind(this))
+	// },
 	handleUserMove(event){
 		const {playerTurn, board, boxIdx} = this.state;
 		
@@ -70,6 +75,7 @@ const GameContainer = React.createClass({
 	},
 	render(){
 		console.log("RENDERING GAME CONTAINER")
+		console.log(this.state)
 		return (
 			<div>
 				{this.state.start === true ? <GameBoard
