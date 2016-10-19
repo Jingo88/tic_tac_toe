@@ -1,11 +1,10 @@
 CREATE TABLE users(
           id INTEGER PRIMARY KEY,
           username TEXT UNIQUE,
-          password TEXT
-);
-
-CREATE TABLE games(
-          id INTEGER PRIMARY KEY,
+          password TEXT,
           board TEXT,
-          user_id INTEGER REFERENCES users
+          boxIdx TEXT,
+          wins INTEGER,
+          losses INTEGER,
+          ties INTEGER
 );

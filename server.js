@@ -33,49 +33,48 @@ app.use(require('webpack-hot-middleware')(compiler));
 
 
 
-// create board
-var data = {
-	board : [
-				[0,0,0],
-				[0,0,0],
-				[0,0,0]
-			],
-	boxIdx:["00","01",'02','10','11','12','20','21','22']
-}
+// // create board
+// var data = {
+// 	board : [
+// 				[0,0,0],
+// 				[0,0,0],
+// 				[0,0,0]
+// 			],
+// 	boxIdx:["00","01",'02','10','11','12','20','21','22']
+// }
 
-var randomMove = function(arr){
+// var randomMove = function(arr){
 	
-	var idx = Math.floor(Math.random() * 9)
-	if (arr[idx] !== "X" && arr[idx] !== "O"){
-		var move = arr[idx];
-		var moveSplit = move.split("");
-		var computerMove = moveSplit.map(function(x){return parseInt(x)});
-		return {
-			"computerMove": computerMove,
-			"idx": idx
-		}
-
-	} else {
-		return randomMove(arr);
-	}
-
-}
+// 	var idx = Math.floor(Math.random() * 9)
+// 	if (arr[idx] !== "X" && arr[idx] !== "O"){
+// 		var move = arr[idx];
+// 		var moveSplit = move.split("");
+// 		var computerMove = moveSplit.map(function(x){return parseInt(x)});
+// 		return {
+// 			"computerMove": computerMove,
+// 			"idx": idx
+// 		}
+// 	} else {
+// 		return randomMove(arr);
+// 	}
+// }
 
 //ROUTES
 app.post('/move',function(req,res){
-	var user = req.body.move;
-	var newBoxIdx = req.body.newBoxIdx;
-	
-	data.board[user[0]][user[1]] = 1;
-	data.boxIdx = newBoxIdx;
-	var move = randomMove(newBoxIdx);
-	var compMove = move["computerMove"]
+	var userId = req.body.id;
+	var board = JSON.stringify(req.body.board);
+	var boxIdx = JSON.stringify(req.body.boxIdx);	
+	var win = req.body.win;	
+	var lose= req.body.lose;	
+	var tie = req.body.tie;	
 
-	data.board[compMove[0]][compMove[1]] = 2;
+	console.log(req.body)
 
-	data.boxIdx[move['idx']] = "O"
-
-	res.json(data)
+	db.run("UPDATE users SET board = ?, boxIdx = ?, wins = wins + ?, losses = losses + ?, ties= ties + ? WHERE id=?", board, boxIdx, win, lose, tie, userId,
+		function(err, row){
+			if (err){throw err;}
+			console.log(row)
+		})
 })
 
 app.post('/login', function(req, res){

@@ -2,38 +2,28 @@ import React from 'react';
 
 import GameBoard from '../components/GameBoard';
 import GameMenu from '../components/GameMenu';
-import {start, userMove, checkWin} from '../helpers/helpers';
+import {start, userMove, checkWin, compMove} from '../helpers/helpers';
 
 const GameContainer = React.createClass({
 	getInitialState(){
 		return {
-			userID : this.props.location.query.userId,
+			userId : this.props.location.query.userId,
 			board : [
 						[0,0,0],
 						[0,0,0],
 						[0,0,0]
 					],
 			boxIdx:["00","01",'02','10','11','12','20','21','22'],
-			playerTurn: 1,
 			start: false,
 			reset: false,
-			end: false
+			end: false,
+			win: 0,
+			lose: 0,
+			tie: 0
 		}
 	},
-	// componentWillMount(){
-	// 	this.getBoard()
-	// },
-	// getBoard(){
-	// 	start()
-	// 		.then(function(data){
-	// 			this.setState({
-	// 				board: data.board,
-	// 				boxIdx: data.boxIdx
-	// 			})
-	// 		}.bind(this))
-	// },
 	handleUserMove(event){
-		const {playerTurn, board, boxIdx} = this.state;
+		const {userId, board, boxIdx, win, lose, tie} = this.state;
 		
 		let moveId = event.target.id;
 		let moveIdx = boxIdx.indexOf(moveId);
@@ -43,24 +33,33 @@ const GameContainer = React.createClass({
 		if (board[userC[0]][userC[1]] === 0){
 			
 			let newBoxIdx = boxIdx;
-			newBoxIdx[moveIdx] = "X"
-			board[userC[0]][userC[1]] = 1
+			newBoxIdx[moveIdx] = "X";
+			let newBoard = board;
+			newBoard[userC[0]][userC[1]] = 1;
 
-			console.log(checkWin(board,1))
-			if (checkWin(board, 1)){
+			this.setState({
+				board: newBoard,
+				boxIdx: newBoxIdx
+			})
+
+			userMove(userId, board, boxIdx, win, lose, tie)
+
+			if (checkWin(newBoard, 1)){
 				console.log("WE WONNNNN")
 			} else {
-				console.log("KEEP GOING")
+				let computer = compMove(board, boxIdx)
+				this.setState({
+					board : computer.board,
+					boxIdx : computer.boxIdx
+				})
+				let compWin = checkWin(board,2)
 			}
 
-
-			userMove(userC, newBoxIdx)
-				.then(function(data){
-					this.setState({
-						board: data.board,
-						boxIdx: data.boxIdx
-					})
-				}.bind(this))
+		// 	userMove(1, [[1,2,1],[2,1,1],[2,2,1]], ['00','01','02','10','11','12','20','21','22'],1,0,0)
+		// 		.then(function(data){
+		// 			console.log("we are in the new user move")
+		// 			console.log(data)
+		// 		}.bind(this))
 		}
 	},
 	handleStart(event){
@@ -74,8 +73,6 @@ const GameContainer = React.createClass({
 
 	},
 	render(){
-		console.log("RENDERING GAME CONTAINER")
-		console.log(this.state)
 		return (
 			<div>
 				{this.state.start === true ? <GameBoard

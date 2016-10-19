@@ -18,17 +18,41 @@ function start(){
 		})
 }
 
-function userMove(move, newBoxIdx){
+function userMove(id, board, boxIdx, win, lose, tie){
 	return axios.post('http://localhost:8000/move',
 			{
-				move: move,
-				newBoxIdx: newBoxIdx
+				id: id,
+				board: board,
+				boxIdx: boxIdx,
+				win: win,
+				lose: lose,
+				tie: tie				
 			}
 		)
 		.then(function(data){
 			return data.data
-			
 		})
+}
+
+var compMove = function(board, boxIdx){
+	
+	var idx = Math.floor(Math.random() * 9)
+
+	if (boxIdx[idx] !== "X" && boxIdx[idx] !== "O"){
+		var move = boxIdx[idx];
+		var moveSplit = move.split("");
+		var cMove = moveSplit.map(function(x){return parseInt(x)});
+
+		board[cMove[0]][cMove[1]] = 2;
+		boxIdx[idx] = "O";
+
+		return {
+			board: board,
+			boxIdx: boxIdx
+		}
+	} else {
+		return compMove(board,boxIdx);
+	}
 }
 
 function checkWin(board, player){
@@ -36,37 +60,63 @@ function checkWin(board, player){
 	let total;
 	let rowCheck;
 	let colCheck;
-	let diagCheck;
+	let diagCheckOne;
+	let diagCheckTwo;
+	let diagArrOne = [];
+	let diagArrTwo = [];
 
-	console.log(board)
-
+// Check for Rows
 	board.map(function(row){
-		rowCheck = row.every(function(current){
+		let temp = row.every(function(current){
 			return current === player
 		})
+		if (temp){
+			rowCheck = true;	
+		}
 	})
 
+// Check for Columns
 	for (var i = 0; i<boardLen; ++i){
 		let tempArr = [];
+		let status;
 		for (var c = 0; c<boardLen; ++c){
-			tempArr.push(board[i][c]);
+			tempArr.push(board[c][i]);
 		}
-		colCheck = tempArr.every(function(current){
+		
+		status = tempArr.every(function(current){
 			return current === player
 		})
+		if (status){
+			colCheck = true;
+		}
 	}
 
-	if (rowCheck || colCheck){
+// Check for diagonals
+	for (var i=0; i<boardLen; ++i){
+		diagArrOne.push(board[i][i])
+	}	
+	diagCheckOne = diagArrOne.every(function(current){
+		return current === player
+	})
+
+	for (var i=0; i<boardLen; ++i){
+		diagArrTwo.push(board[i][boardLen - 1 - i])
+	}	
+	diagCheckTwo = diagArrTwo.every(function(current){
+		return current === player
+	})
+
+	if (rowCheck || colCheck || diagCheckOne || diagCheckTwo){
 		return true
 	} else {
 		return false
 	}
-	
 }
 
 module.exports = {
 	start: start,
 	userMove: userMove,
 	checkWin: checkWin,
-	login: login
+	compMove: compMove,
+	login: login,
 }
