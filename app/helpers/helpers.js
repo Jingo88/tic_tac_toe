@@ -18,7 +18,7 @@ function start(){
 		})
 }
 
-function userMove(id, board, boxIdx, win, lose, tie){
+function updateMove(id, board, boxIdx, win, lose, tie){
 	return axios.post('http://localhost:8000/move',
 			{
 				id: id,
@@ -32,6 +32,22 @@ function userMove(id, board, boxIdx, win, lose, tie){
 		.then(function(data){
 			return data.data
 		})
+}
+
+function updateFinish(userId, finish){
+	return axios.post('http://localhost:8000/move',
+		{
+			id: id,
+			board: board,
+			boxIdx: boxIdx,
+			win: win,
+			lose: lose,
+			tie: tie				
+		}
+	)
+	.then(function(data){
+		return data.data
+	})
 }
 
 var compMove = function(board, boxIdx){
@@ -53,6 +69,17 @@ var compMove = function(board, boxIdx){
 	} else {
 		return compMove(board,boxIdx);
 	}
+}
+
+function checkTie(board){
+	let finish = 0;
+
+	board.map(function(row){
+		if (row.indexOf(0) === -1){
+			finish ++
+		}
+	})
+	return finish === 3 ? true : false;
 }
 
 function checkWin(board, player){
@@ -115,8 +142,9 @@ function checkWin(board, player){
 
 module.exports = {
 	start: start,
-	userMove: userMove,
+	updateMove: updateMove,
 	checkWin: checkWin,
 	compMove: compMove,
 	login: login,
+	checkTie: checkTie
 }
