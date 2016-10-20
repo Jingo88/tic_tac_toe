@@ -24,7 +24,7 @@ function UserInput(props){
 		<div>
 			<form onSubmit = {props.onUserSubmit} className="col s8 push-s2">
 				<input type="text" placeholder="Enter Your Username" data="username" className="input-field col s12"/>
-				<input type="text" placeholder="Enter Your Password" data="password" className="input-field col s12"/>
+				<input type="password" placeholder="Enter Your Password" data="password" className="input-field col s12"/>
 				<input type="submit" className="waves-light waves-effect btn col s2" />
 				<button className="waves-effect waves-light btn col s2 push-s2"><a href="/" style={styles.aInherit}>Cancel</a></button>
 			</form>
@@ -38,12 +38,12 @@ function HomeComponent(props){
 	return(
 		<div className="row">
 			<h1>Welcome to Jason's Tic Tac Toe</h1>
-			<h4>In a game of life and death you will battle it out for title of greatest X and O</h4>
+			<h4>Feel free to login/register with our super secure BCrypt hashing system to play this game of life and death</h4>
 
 			{userAction === null ? <Options onUserChoice ={props.onUserChoice}/> : 
 				<UserInput onUserSubmit = {props.onUserSubmit}/>}
 			
-			{register === "" ? <h1 className="col s8 push-s2">Have an Account?</h1> : <h1 className='col s8 push-s2'>{register}</h1>}
+			<h1 className='col s8 push-s2'>{register}</h1>
 		</div>
 	
 	)

@@ -49,41 +49,44 @@ app.post('/move',function(req,res){
 	var lose= req.body.lose;	
 	var tie = req.body.tie;	
 
-	console.log(req.body)
-
-	db.run("UPDATE users SET board = ?, boxIdx = ?, wins = wins + ?, losses = losses + ?, ties= ties + ? WHERE id=?", board, boxIdx, win, lose, tie, userId,
+	db.run("UPDATE users SET board = ?, boxIdx = ?, wins = ?, losses = ?, ties= ? WHERE id=?", board, boxIdx, win, lose, tie, userId,
 		function(err, row){
 			if (err){throw err;}
 		})
 })
 
+app.get('/logout', function(req, res){
+	req.session.destroy();
+	res.json('logout');
+});
+
 app.post('/login', function(req, res){
 	var username = req.body.username;
 	var password = req.body.password;
-	console.log(username);
-	console.log(password);
+	console.log(req.body)
 	
 	db.get('SELECT * FROM users WHERE username = ?', username,
 		function(err, row){
-			console.log(row)
 			if (err) {throw err;}
-
-			if (row){
+			
+			if (row === undefined){
+				console.log('NO MATCHING')
+				res.json({
+					success:false,
+					info: null
+				})
+			} else {
 				var match = bcrypt.compareSync(password, row.password)
 				if (match){
+					console.log('YOUR PASSWORD MATCHED')
 					req.session.valid_user = true;
 					req.session.userId = row.id;
 					res.json({
 						success: true,
 						info: row
-					})
-				} else {
-					res.json({
-						success:false,
-						info: null
-					})
+					})	
 				}
-			} 
+			}
 		})
 })
 
@@ -127,13 +130,6 @@ app.get('/start', function(req,res){
 	} else {
 		res.redirect('/')
 	}
-	// if req.session.valid_user === true
-	// grab req.session.userId and make a db call
-	// return the users information in json
-	// set state to that users information
-	// change the way the state keeps wins losses and ties
-	// change the way the server adds wins losses and ties
-	// res.json(data)
 })
 
 app.get('*', function(req,res){
@@ -146,7 +142,6 @@ app.listen(port, function(err){
 		return
 	}
 	console.log("Listening on port " + port)
-
 })
 
 

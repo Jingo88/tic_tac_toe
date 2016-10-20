@@ -10,7 +10,7 @@ const HomeContainer = React.createClass({
 	getInitialState(){
 		return {
 			userAction: null,
-			register: ""
+			register: "Have an Account?"
 		}
 	},
 	handleUserChoice(event){
@@ -30,7 +30,9 @@ const HomeContainer = React.createClass({
 							pathname: '/start',
 						})
 					} else {
-						console.log('WE HAVE TO BUILD SOMETHING TO TELL THE USER THEIR LOGIN INFO IS WRONG')
+						this.setState({
+							register: "Sorry your login information does not match our records"
+						})
 					}
 				}.bind(this))
 		} else if (this.state.userAction === "Register") {
