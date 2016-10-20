@@ -11,6 +11,17 @@ function login(un, pw){
 	})
 }
 
+function register(un, pw){
+	return axios.post('http://localhost:8000/register',
+		{
+			username: un,
+			password: pw
+		}
+	).then(function(data){
+		return data.data
+	})
+}
+
 function start(){
 	return axios.get('http://localhost:8000/start')
 		.then(function(board){
@@ -146,5 +157,6 @@ module.exports = {
 	checkWin: checkWin,
 	compMove: compMove,
 	login: login,
-	checkTie: checkTie
+	checkTie: checkTie,
+	register: register
 }

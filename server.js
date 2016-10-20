@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var app = express();
 var bodyParser = require('body-parser');
+var bcrypt = require('bcrypt');
 
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('ttt.db');
@@ -30,34 +31,6 @@ app.use(require('webpack-dev-middleware')(compiler, {
 	publicPath: webpackConfig.output.publicPath
 }));
 app.use(require('webpack-hot-middleware')(compiler));
-
-
-
-// // create board
-// var data = {
-// 	board : [
-// 				[0,0,0],
-// 				[0,0,0],
-// 				[0,0,0]
-// 			],
-// 	boxIdx:["00","01",'02','10','11','12','20','21','22']
-// }
-
-// var randomMove = function(arr){
-	
-// 	var idx = Math.floor(Math.random() * 9)
-// 	if (arr[idx] !== "X" && arr[idx] !== "O"){
-// 		var move = arr[idx];
-// 		var moveSplit = move.split("");
-// 		var computerMove = moveSplit.map(function(x){return parseInt(x)});
-// 		return {
-// 			"computerMove": computerMove,
-// 			"idx": idx
-// 		}
-// 	} else {
-// 		return randomMove(arr);
-// 	}
-// }
 
 //ROUTES
 app.post('/move',function(req,res){
@@ -89,7 +62,8 @@ app.post('/login', function(req, res){
 			if (err) {throw err;}
 
 			if (row){
-				if (row.password === password){
+				var match = bcrypt.compareSync(password, row.password)
+				if (match){
 					res.json({
 						success: true,
 						info: row
@@ -105,7 +79,17 @@ app.post('/login', function(req, res){
 })
 
 app.post('/register', function(req, res){
+	console.log("you have hit the register")
+	var username = req.body.username;
+	var password = req.body.password;
+	var hash = bcrypt.hashSync(password, 8);
 
+	db.run('INSERT INTO users (username, password, board, boxIdx, wins, losses, ties) VALUES (?, ?, "[]", "[]", 0,0,0)', username, hash, 
+		function(err)
+			{ if (err) 
+				{throw err;}
+			}
+	)
 })
 
 app.get('/start', function(req,res){

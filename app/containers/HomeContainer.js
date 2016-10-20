@@ -1,7 +1,7 @@
 import React from 'react';
 
 import HomeComponent from '../components/HomeComponent';
-import {login} from '../helpers/helpers';
+import {login, register} from '../helpers/helpers';
 
 const HomeContainer = React.createClass({
 	contextTypes:{
@@ -33,7 +33,11 @@ const HomeContainer = React.createClass({
 					}
 				}.bind(this))
 		} else if (this.state.userAction === "Register") {
-
+			register(username, password)
+				.then(function(data){
+						console.log("we are in register if statement")
+						console.log(data)
+				}.bind(this))
 		}
 	},
 	render(){
