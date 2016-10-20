@@ -1,7 +1,6 @@
 import React from 'react';
 
 function GameMenu(props){
-	console.log(props)
 	const {start, username, wins, losses, ties} = props.data
 	const {onStart, onReset, onEnd, onLogOut} = props
 	return (

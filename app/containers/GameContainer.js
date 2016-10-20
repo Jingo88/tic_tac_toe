@@ -41,6 +41,7 @@ const GameContainer = React.createClass({
 					losses: losses,
 					ties: ties
 				})
+
 			}.bind(this))
 	},
 	handleUserMove(event){
@@ -66,40 +67,50 @@ const GameContainer = React.createClass({
 			updateMove(userId, board, boxIdx, wins, losses, ties);
 
 			if (checkWin(newBoard, 1)){
-				updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins+1, losses, ties)		
+				
 				this.setState({
 					finish: "YOU WIN!",
 					wins: wins + 1
 				})
 				console.log('YOU WONNNNN')
+
+				updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins, losses, ties)
+				
 			} else {
 				let computer = compMove(board, boxIdx)
+				
 				this.setState({
 					board : computer.board,
 					boxIdx : computer.boxIdx
 				})
 
+				
 				updateMove(userId, board, boxIdx, wins, losses, ties)
 
 				let compWin = checkWin(board,2);
 
 				if (compWin){
-					updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins, losses+1, ties)
 					console.log('YOU HAVE LOST')
+
 					this.setState({
 						finish: "YOU LOSE!",
 						losses: losses+1
 					})
+
+					updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins, losses, ties)	
 				} else {
 					let isTie = checkTie(board);
 
 					if (isTie){
-						updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins, losses, ties+1)
+
 						console.log('YOU HAVE TIED')
+						
 						this.setState({
 							finish: "It's A TIE!",
 							ties: ties+1
 						})
+
+						updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins, losses, ties)
 					}
 				}
 			}
@@ -120,7 +131,7 @@ const GameContainer = React.createClass({
 			boxIdx:["00","01",'02','10','11','12','20','21','22'],
 			finish: ""
 		})
-		updateMove(userId, board, boxIdx, win, losses + 1, ties)
+		updateMove(userId, board, boxIdx, win, losses, ties)
 	},
 	handleEnd(event){
 		const {userId, board, boxIdx, wins, losses, ties} = this.state;
@@ -135,7 +146,7 @@ const GameContainer = React.createClass({
 			start: false,
 			finish: ""
 		})
-		updateMove(userId, board, boxIdx, wins, losses+1, ties)
+		updateMove(userId, board, boxIdx, wins, losses, ties)
 	},
 	handleLogOut(event){
 		logout()
@@ -146,6 +157,7 @@ const GameContainer = React.createClass({
 			}.bind(this))
 	},
 	render(){
+		console.log(this.state)
 		return (
 			<div className="container">
 				{this.state.start === true ? <GameBoard

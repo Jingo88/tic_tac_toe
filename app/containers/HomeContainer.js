@@ -1,7 +1,7 @@
 import React from 'react';
 
 import HomeComponent from '../components/HomeComponent';
-import {login, register} from '../helpers/helpers';
+import {login, register, sessionCheck} from '../helpers/helpers';
 
 const HomeContainer = React.createClass({
 	contextTypes:{
@@ -12,6 +12,16 @@ const HomeContainer = React.createClass({
 			userAction: null,
 			register: "Have an Account?"
 		}
+	},
+	componentDidMount(){
+		sessionCheck()
+			.then(function(data){
+				if (data === true){
+					this.context.router.push({
+						pathname: '/start',
+					})
+				}
+			}.bind(this))
 	},
 	handleUserChoice(event){
 		this.setState({userAction: event.target.name})
@@ -27,7 +37,7 @@ const HomeContainer = React.createClass({
 					if (data.success === true){
 						let userId = data.info["id"]
 						this.context.router.push({
-							pathname: '/start',
+							pathname: '/start'
 						})
 					} else {
 						this.setState({

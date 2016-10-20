@@ -11,9 +11,19 @@ function login(un, pw){
 	})
 }
 
+function sessionCheck(){
+	return axios.get('http://localhost:8000/session')
+		.then(function(data){
+			return data.data
+		})
+}
+
 function logout(){
+	console.log('aoisdjfioasdjfioadsjfio;asd')
 	return axios.get('http://localhost:8000/logout')
 		.then(function(data){
+			console.log('HELPERS LOGOUT')
+			console.log(data)
 			return data
 		})
 }
@@ -166,5 +176,6 @@ module.exports = {
 	login: login,
 	logout: logout,
 	checkTie: checkTie,
-	register: register
+	register: register,
+	sessionCheck: sessionCheck
 }

@@ -42,23 +42,33 @@ app.use(require('webpack-hot-middleware')(compiler));
 
 //ROUTES
 app.post('/move',function(req,res){
-	var userId = req.body.id;
+	var userId = req.session.userId;
 	var board = JSON.stringify(req.body.board);
-	var boxIdx = JSON.stringify(req.body.boxIdx);	
+	var boxIdx = JSON.stringify(req.body.boxIdx);
 	var win = req.body.win;	
 	var lose= req.body.lose;	
 	var tie = req.body.tie;	
 
 	db.run("UPDATE users SET board = ?, boxIdx = ?, wins = ?, losses = ?, ties= ? WHERE id=?", board, boxIdx, win, lose, tie, userId,
-		function(err, row){
+		function(err){
 			if (err){throw err;}
 		})
+
+	res.json(true)
 })
 
 app.get('/logout', function(req, res){
 	req.session.destroy();
 	res.json('logout');
 });
+
+app.get('/session', function(req, res){
+	if (req.session.valid_user === true){
+		res.json(true)
+	} else {
+		res.json(false)
+	}
+})
 
 app.post('/login', function(req, res){
 	var username = req.body.username;
