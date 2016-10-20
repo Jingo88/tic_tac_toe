@@ -20,15 +20,38 @@ function Box(props){
 	)
 }
 
+function Finish(props){
+	return (
+		<h1>{props.data}</h1>
+	)
+}
+
 function GameComponent(props){
+	console.log(props)
 	return(
-		<div className='row'>
-			{props.data.boxIdx.map(function(state){
-				return <Box 
-					idx={state} 
-					onUserMove={props.onUserMove}/>
-			})}
+		<div>
+			{props.data.finish === "" ? 
+				<div className='row'>
+					{props.data.boxIdx.map(function(state){
+						return <Box 
+							idx={state} 
+							onUserMove={props.onUserMove}/>
+					})}
+				</div>
+				
+			: 
+				<div className='row'>
+					
+					{props.data.boxIdx.map(function(state){
+						return <Box 
+							idx={state} 
+							onUserMove={props.onUserMove}/>
+					})}
+					<Finish data={props.data.finish}/>
+				</div>
+		}
 		</div>
+
 	)
 }
 

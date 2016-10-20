@@ -15,11 +15,11 @@ const GameContainer = React.createClass({
 					],
 			boxIdx:["00","01",'02','10','11','12','20','21','22'],
 			start: false,
-			reset: false,
 			end: false,
 			win: 0,
 			lose: 0,
-			tie: 0
+			tie: 0, 
+			finish: ""
 		}
 	},
 	handleUserMove(event){
@@ -42,10 +42,11 @@ const GameContainer = React.createClass({
 				boxIdx: newBoxIdx
 			})
 
-			updateMove(userId, board, boxIdx, win, lose, tie)
+			updateMove(userId, board, boxIdx, win, lose, tie);
 
 			if (checkWin(newBoard, 1)){
 				updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], 1, lose, tie)		
+				this.setState({finish: "YOU WIN!"})
 				console.log('YOU WONNNNN')
 			} else {
 				let computer = compMove(board, boxIdx)
@@ -56,34 +57,64 @@ const GameContainer = React.createClass({
 
 				updateMove(userId, board, boxIdx, win, lose, tie)
 
-				let compWin = checkWin(board,2)
+				let compWin = checkWin(board,2);
 
 				if (compWin){
 					updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], win, 1, tie)
 					console.log('YOU HAVE LOST')
+					this.setState({finish: "YOU LOSE!"})
 				} else {
-					let isTie = checkTie(board)
+					let isTie = checkTie(board);
 
 					if (isTie){
 						updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], win, lose, 1)
 						console.log('YOU HAVE TIED')
+						this.setState({finish: "It's A TIE!"})
 					}
 				}
 			}
 		}
 	},
 	handleStart(event){
-		console.log('you clicked it!!!')
 		this.setState({start: true})
 	},
 	handleReset(event){
-
+		const {userId, board, boxIdx, win, lose, tie} = this.state;
+		
+		this.setState({
+			board : [
+						[0,0,0],
+						[0,0,0],
+						[0,0,0]
+					],
+			boxIdx:["00","01",'02','10','11','12','20','21','22'],
+			end: false,
+			win: 0,
+			lose: 0,
+			tie: 0, 
+			finish: ""
+		})
+		updateMove(userId, board, boxIdx, win, 1, tie)
 	},
 	handleEnd(event){
-
+		const {userId, board, boxIdx, win, lose, tie} = this.state;
+		
+		this.setState({
+			board : [
+						[0,0,0],
+						[0,0,0],
+						[0,0,0]
+					],
+			boxIdx:["00","01",'02','10','11','12','20','21','22'],
+			start: false,
+			win: 0,
+			lose: 0,
+			tie: 0, 
+			finish: ""
+		})
+		updateMove(userId, board, boxIdx, win, 1, tie)
 	},
 	render(){
-		console.log(this.state)
 		return (
 			<div>
 				{this.state.start === true ? <GameBoard
@@ -95,7 +126,6 @@ const GameContainer = React.createClass({
 					onReset = {this.handleReset}
 					onEnd = {this.handleEnd}/> 
 			</div>
-			
 		)
 	}
 })
