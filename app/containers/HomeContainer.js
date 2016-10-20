@@ -27,8 +27,7 @@ const HomeContainer = React.createClass({
 					if (data.success === true){
 						let userId = data.info["id"]
 						this.context.router.push({
-							pathname: '/game',
-							query: {userId}
+							pathname: '/start',
 						})
 					} else {
 						console.log('WE HAVE TO BUILD SOMETHING TO TELL THE USER THEIR LOGIN INFO IS WRONG')

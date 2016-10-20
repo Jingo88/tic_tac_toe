@@ -3,6 +3,7 @@ var path = require('path');
 var app = express();
 var bodyParser = require('body-parser');
 var bcrypt = require('bcrypt');
+var session = require('express-session')
 
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('ttt.db');
@@ -20,6 +21,13 @@ app.use(function(req, res, next) {
   res.setHeader('Cache-Control', 'no-cache');
   next();
 });
+
+//sessions
+app.use(session({
+	secret: "string",
+	resave: false,
+	saveUninitialized: true,
+}))
 
 //Middleware to grab information from axios post request
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -46,7 +54,6 @@ app.post('/move',function(req,res){
 	db.run("UPDATE users SET board = ?, boxIdx = ?, wins = wins + ?, losses = losses + ?, ties= ties + ? WHERE id=?", board, boxIdx, win, lose, tie, userId,
 		function(err, row){
 			if (err){throw err;}
-			console.log(row)
 		})
 })
 
@@ -64,6 +71,8 @@ app.post('/login', function(req, res){
 			if (row){
 				var match = bcrypt.compareSync(password, row.password)
 				if (match){
+					req.session.valid_user = true;
+					req.session.userId = row.id;
 					res.json({
 						success: true,
 						info: row
@@ -79,20 +88,19 @@ app.post('/login', function(req, res){
 })
 
 app.post('/register', function(req, res){
-	console.log("you have hit the register")
 	var username = req.body.username;
 	var password = req.body.password;
 	var hash = bcrypt.hashSync(password, 8);
+	var boxIdx = JSON.stringify(["00","01",'02','10','11','12','20','21','22'])
 
 	db.get('SELECT * FROM users WHERE username = ?', username,
 		function(err, row){
-			console.log(row)
 			if (err) { throw err; }
 
 			if (row){
 				res.json({register: false})
 			} else {
-				db.run('INSERT INTO users (username, password, board, boxIdx, wins, losses, ties) VALUES (?, ?, "[]", "[]", 0,0,0)', username, hash, 
+				db.run('INSERT INTO users (username, password, board, boxIdx, wins, losses, ties) VALUES (?, ?, "[[0,0,0],[0,0,0],[0,0,0]]", ?, 0,0,0)', username, hash, boxIdx,
 					function(err){ 
 						if (err){
 							throw err;
@@ -106,7 +114,26 @@ app.post('/register', function(req, res){
 })
 
 app.get('/start', function(req,res){
-	res.json(data)
+	var userId = req.session.userId;
+
+	if (req.session.valid_user === true && req.session.valid_user !== undefined){
+		db.get('SELECT * FROM users WHERE id = ?', userId,
+			function(err, row){
+				if (err){throw err;}
+
+				res.json(row)
+			}
+		)
+	} else {
+		res.redirect('/')
+	}
+	// if req.session.valid_user === true
+	// grab req.session.userId and make a db call
+	// return the users information in json
+	// set state to that users information
+	// change the way the state keeps wins losses and ties
+	// change the way the server adds wins losses and ties
+	// res.json(data)
 })
 
 app.get('*', function(req,res){

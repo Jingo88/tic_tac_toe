@@ -2,12 +2,11 @@ import React from 'react';
 
 import GameBoard from '../components/GameBoard';
 import GameMenu from '../components/GameMenu';
-import {start, updateMove, checkWin, compMove, checkTie} from '../helpers/helpers';
+import {start, updateMove, checkWin, compMove, checkTie, getUserInfo} from '../helpers/helpers';
 
 const GameContainer = React.createClass({
 	getInitialState(){
 		return {
-			userId : this.props.location.query.userId,
 			board : [
 						[0,0,0],
 						[0,0,0],
@@ -16,14 +15,33 @@ const GameContainer = React.createClass({
 			boxIdx:["00","01",'02','10','11','12','20','21','22'],
 			start: false,
 			end: false,
-			win: 0,
-			lose: 0,
-			tie: 0, 
-			finish: ""
+			wins: 0,
+			losses: 0,
+			ties: 0, 
+			finish: "",
+			username: ""
 		}
 	},
+	componentDidMount(){
+		getUserInfo()
+			.then(function(data){
+				const {board, boxIdx, username, wins, losses, ties} = data;
+				
+				let boardParse = JSON.parse(board);
+				let boxIdxParse = JSON.parse(boxIdx);
+				
+				this.setState({
+					board :boardParse,
+					boxIdx: boxIdxParse,
+					username: username,
+					wins: wins,
+					losses: losses,
+					ties: ties
+				})
+			}.bind(this))
+	},
 	handleUserMove(event){
-		const {userId, board, boxIdx, win, lose, tie} = this.state;
+		const {userId, board, boxIdx, wins, losses, ties} = this.state;
 		
 		let moveId = event.target.id;
 		let moveIdx = boxIdx.indexOf(moveId);
@@ -42,10 +60,10 @@ const GameContainer = React.createClass({
 				boxIdx: newBoxIdx
 			})
 
-			updateMove(userId, board, boxIdx, win, lose, tie);
+			updateMove(userId, board, boxIdx, wins, losses, ties);
 
 			if (checkWin(newBoard, 1)){
-				updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], 1, lose, tie)		
+				updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], 1, losses, ties)		
 				this.setState({finish: "YOU WIN!"})
 				console.log('YOU WONNNNN')
 			} else {
@@ -55,19 +73,19 @@ const GameContainer = React.createClass({
 					boxIdx : computer.boxIdx
 				})
 
-				updateMove(userId, board, boxIdx, win, lose, tie)
+				updateMove(userId, board, boxIdx, wins, losses, ties)
 
 				let compWin = checkWin(board,2);
 
 				if (compWin){
-					updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], win, 1, tie)
+					updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins, 1, ties)
 					console.log('YOU HAVE LOST')
-					this.setState({finish: "YOU LOSE!"})
+					this.setState({finish: "YOU losses!"})
 				} else {
 					let isTie = checkTie(board);
 
 					if (isTie){
-						updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], win, lose, 1)
+						updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins, losses, 1)
 						console.log('YOU HAVE TIED')
 						this.setState({finish: "It's A TIE!"})
 					}
@@ -79,7 +97,7 @@ const GameContainer = React.createClass({
 		this.setState({start: true})
 	},
 	handleReset(event){
-		const {userId, board, boxIdx, win, lose, tie} = this.state;
+		const {userId, board, boxIdx, wins, losses, ties} = this.state;
 		
 		this.setState({
 			board : [
@@ -89,15 +107,15 @@ const GameContainer = React.createClass({
 					],
 			boxIdx:["00","01",'02','10','11','12','20','21','22'],
 			end: false,
-			win: 0,
-			lose: 0,
-			tie: 0, 
+			wins: 0,
+			losses: 0,
+			ties: 0, 
 			finish: ""
 		})
-		updateMove(userId, board, boxIdx, win, 1, tie)
+		updateMove(userId, board, boxIdx, win, 1, ties)
 	},
 	handleEnd(event){
-		const {userId, board, boxIdx, win, lose, tie} = this.state;
+		const {userId, board, boxIdx, wins, losses, ties} = this.state;
 		
 		this.setState({
 			board : [
@@ -107,14 +125,16 @@ const GameContainer = React.createClass({
 					],
 			boxIdx:["00","01",'02','10','11','12','20','21','22'],
 			start: false,
-			win: 0,
-			lose: 0,
-			tie: 0, 
+			wins: 0,
+			losses: 0,
+			ties: 0, 
 			finish: ""
 		})
-		updateMove(userId, board, boxIdx, win, 1, tie)
+		updateMove(userId, board, boxIdx, wins, 1, ties)
 	},
 	render(){
+		console.log("rendering")
+		console.log(this.state)
 		return (
 			<div>
 				{this.state.start === true ? <GameBoard

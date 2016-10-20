@@ -6,7 +6,7 @@ import GameContainer from '../containers/GameContainer';
 const router = (
 	<Router history={hashHistory}>
 		<Route path='/' component={HomeContainer}/>
-		<Route path='/game' component={GameContainer}/>
+		<Route path='/start' component={GameContainer}/>
 	</Router>
 )
 

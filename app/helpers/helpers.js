@@ -22,10 +22,10 @@ function register(un, pw){
 	})
 }
 
-function start(){
+function getUserInfo(){
 	return axios.get('http://localhost:8000/start')
-		.then(function(board){
-			return board.data
+		.then(function(data){
+			return data.data
 		})
 }
 
@@ -152,7 +152,7 @@ function checkWin(board, player){
 }
 
 module.exports = {
-	start: start,
+	getUserInfo: getUserInfo,
 	updateMove: updateMove,
 	checkWin: checkWin,
 	compMove: compMove,
