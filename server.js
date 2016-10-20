@@ -84,11 +84,24 @@ app.post('/register', function(req, res){
 	var password = req.body.password;
 	var hash = bcrypt.hashSync(password, 8);
 
-	db.run('INSERT INTO users (username, password, board, boxIdx, wins, losses, ties) VALUES (?, ?, "[]", "[]", 0,0,0)', username, hash, 
-		function(err)
-			{ if (err) 
-				{throw err;}
+	db.get('SELECT * FROM users WHERE username = ?', username,
+		function(err, row){
+			console.log(row)
+			if (err) { throw err; }
+
+			if (row){
+				res.json({register: false})
+			} else {
+				db.run('INSERT INTO users (username, password, board, boxIdx, wins, losses, ties) VALUES (?, ?, "[]", "[]", 0,0,0)', username, hash, 
+					function(err){ 
+						if (err){
+							throw err;
+						}
+						res.json({register:true})
+					}
+				)
 			}
+		}
 	)
 })
 

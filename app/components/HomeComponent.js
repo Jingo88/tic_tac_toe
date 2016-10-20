@@ -30,10 +30,13 @@ function UserInput(props){
 }
 
 function HomeComponent(props){
+	const {userAction, register} = props.data;
+
 	return(
 		<div className="row">
-			{props.data === null ? <Options onUserChoice ={props.onUserChoice}/> : 
+			{userAction === null ? <Options onUserChoice ={props.onUserChoice}/> : 
 				<UserInput onUserSubmit = {props.onUserSubmit}/>}
+			{register === "" ? <h1>Please Login or Register</h1> : <h1>{register}</h1>}
 		</div>
 	
 	)

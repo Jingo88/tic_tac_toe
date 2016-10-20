@@ -9,7 +9,8 @@ const HomeContainer = React.createClass({
 	},
 	getInitialState(){
 		return {
-			userAction: null
+			userAction: null,
+			register: ""
 		}
 	},
 	handleUserChoice(event){
@@ -19,6 +20,7 @@ const HomeContainer = React.createClass({
 		event.preventDefault()
 		let username = event.target.children[0].value;
 		let password = event.target.children[1].value;
+
 		if (this.state.userAction === "Login"){
 			login(username, password)
 				.then(function(data){
@@ -35,15 +37,24 @@ const HomeContainer = React.createClass({
 		} else if (this.state.userAction === "Register") {
 			register(username, password)
 				.then(function(data){
-						console.log("we are in register if statement")
-						console.log(data)
+					console.log(data)
+					if (data.register){
+						this.setState({
+							userAction: null,
+							register: "Successfully Registered"
+						})
+					} else {
+						this.setState({
+							register: "Sorry that username has been taken"
+						})
+					}
 				}.bind(this))
 		}
 	},
 	render(){
 		return (
 			<HomeComponent 
-				data={this.state.userAction} 
+				data={this.state} 
 				onUserChoice = {this.handleUserChoice}
 				onUserSubmit = {this.handleUserSubmit}/>
 		)
