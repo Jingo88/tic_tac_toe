@@ -2,7 +2,7 @@ import React from 'react';
 
 import GameBoard from '../components/GameBoard';
 import GameMenu from '../components/GameMenu';
-import {start, updateMove, checkWin, compMove, checkTie, getUserInfo, logout} from '../helpers/helpers';
+import {start, updateMove, checkWin, compMove, getUserInfo, logout} from '../helpers/helpers';
 
 const GameContainer = React.createClass({
 	contextTypes:{
@@ -22,7 +22,8 @@ const GameContainer = React.createClass({
 			losses: 0,
 			ties: 0, 
 			finish: "",
-			username: ""
+			username: "",
+			moves: 0
 		}
 	},
 	componentDidMount(){
@@ -45,7 +46,7 @@ const GameContainer = React.createClass({
 			}.bind(this))
 	},
 	handleUserMove(event){
-		const {userId, board, boxIdx, wins, losses, ties} = this.state;
+		const {userId, board, boxIdx, wins, losses, ties, moves} = this.state;
 		
 		let moveId = event.target.id;
 		let moveIdx = boxIdx.indexOf(moveId);
@@ -58,11 +59,7 @@ const GameContainer = React.createClass({
 			newBoxIdx[moveIdx] = "X";
 			let newBoard = board;
 			newBoard[userC[0]][userC[1]] = 1;
-
-			this.setState({
-				board: newBoard,
-				boxIdx: newBoxIdx
-			})
+			let newMoves = moves + 1;
 
 			updateMove(userId, board, boxIdx, wins, losses, ties);
 
@@ -70,50 +67,52 @@ const GameContainer = React.createClass({
 				
 				this.setState({
 					finish: "YOU WIN!",
-					wins: wins + 1
+					wins: wins + 1,
+					moves: 0
 				})
 				console.log('YOU WONNNNN')
 
 				updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins, losses, ties)
 				
-			} else {
-				let computer = compMove(board, boxIdx)
-				
-				this.setState({
-					board : computer.board,
-					boxIdx : computer.boxIdx
-				})
+			} else if (newMoves >=5){
+					console.log("THIS IS A TIE")
+					console.log(moves)
 
+					this.setState({
+						finish: "It's A TIE!",
+						ties: ties+1,
+						moves: 0
+					})
+
+					updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins, losses, ties)
 				
+			} else {
+				let computer = compMove(newBoard, newBoxIdx)
+
+				newBoard = computer.board;
+				newBoxIdx = computer.boxIdx;
+
 				updateMove(userId, board, boxIdx, wins, losses, ties)
 
-				let compWin = checkWin(board,2);
+				let compWin = checkWin(newBoard,2);
 
-				if (compWin){
+				if (compWin === true){
 					console.log('YOU HAVE LOST')
 
 					this.setState({
 						finish: "YOU LOSE!",
-						losses: losses+1
+						losses: losses+1,
+						moves: 0
 					})
 
 					updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins, losses, ties)	
-				} else {
-					let isTie = checkTie(board);
-
-					if (isTie){
-
-						console.log('YOU HAVE TIED')
-						
-						this.setState({
-							finish: "It's A TIE!",
-							ties: ties+1
-						})
-
-						updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins, losses, ties)
-					}
 				}
 			}
+			this.setState({
+						board: newBoard,
+						boxIdx: newBoxIdx,
+						moves: moves+1
+			})
 		}
 	},
 	handleStart(event){
@@ -129,9 +128,10 @@ const GameContainer = React.createClass({
 						[0,0,0]
 					],
 			boxIdx:["00","01",'02','10','11','12','20','21','22'],
-			finish: ""
+			finish: "",
+			moves: 0
 		})
-		updateMove(userId, board, boxIdx, win, losses, ties)
+		updateMove(userId, board, boxIdx, wins, losses, ties)
 	},
 	handleEnd(event){
 		const {userId, board, boxIdx, wins, losses, ties} = this.state;
@@ -144,7 +144,8 @@ const GameContainer = React.createClass({
 					],
 			boxIdx:["00","01",'02','10','11','12','20','21','22'],
 			start: false,
-			finish: ""
+			finish: "",
+			moves: 0
 		})
 		updateMove(userId, board, boxIdx, wins, losses, ties)
 	},
@@ -157,7 +158,6 @@ const GameContainer = React.createClass({
 			}.bind(this))
 	},
 	render(){
-		console.log(this.state)
 		return (
 			<div className="container">
 				{this.state.start === true ? <GameBoard

@@ -95,19 +95,9 @@ var compMove = function(board, boxIdx){
 			boxIdx: boxIdx
 		}
 	} else {
+		// have to check for tie here
 		return compMove(board,boxIdx);
 	}
-}
-
-function checkTie(board){
-	let finish = 0;
-
-	board.map(function(row){
-		if (row.indexOf(0) === -1){
-			finish ++
-		}
-	})
-	return finish === 3 ? true : false;
 }
 
 function checkWin(board, player){
@@ -175,7 +165,6 @@ module.exports = {
 	compMove: compMove,
 	login: login,
 	logout: logout,
-	checkTie: checkTie,
 	register: register,
 	sessionCheck: sessionCheck
 }

@@ -27,7 +27,6 @@ function Finish(props){
 }
 
 function GameComponent(props){
-	console.log(props)
 	return(
 		<div>
 			{props.data.finish === "" ? 
