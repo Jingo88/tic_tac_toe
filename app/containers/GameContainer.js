@@ -3,7 +3,7 @@ import React from 'react';
 import GameBoard from '../components/GameBoard';
 import GameMenu from '../components/GameMenu';
 import Heading from '../components/Heading';
-import {start, updateMove, checkWin, compMove, getUserInfo, logout} from '../helpers/helpers';
+import {start, updateMove, checkWin, compMove, getUserInfo, logout, countMoves} from '../helpers/helpers';
 
 const GameContainer = React.createClass({
 	contextTypes:{
@@ -34,14 +34,17 @@ const GameContainer = React.createClass({
 				
 				let boardParse = JSON.parse(board);
 				let boxIdxParse = JSON.parse(boxIdx);
-				
+
+				let count = countMoves(boardParse);
+
 				this.setState({
 					board :boardParse,
 					boxIdx: boxIdxParse,
 					username: username,
 					wins: wins,
 					losses: losses,
-					ties: ties
+					ties: ties,
+					moves: count
 				})
 
 			}.bind(this))

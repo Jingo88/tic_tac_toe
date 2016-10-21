@@ -44,6 +44,20 @@ function getUserInfo(){
 		})
 }
 
+function countMoves(board){
+	let boardLen = board.length;
+	let count = 0;
+
+	board.map(function(row){
+		for (var i = 0; i<boardLen; ++i){
+			if (row[i] === 1){
+				count ++ 
+			}
+		}
+	})
+	return count;
+}
+
 function updateMove(id, board, boxIdx, win, lose, tie){
 	return axios.post('http://localhost:8000/move',
 			{
@@ -60,6 +74,7 @@ function updateMove(id, board, boxIdx, win, lose, tie){
 		})
 }
 
+// are we using this?
 function updateFinish(userId, finish){
 	return axios.post('http://localhost:8000/move',
 		{
@@ -164,5 +179,6 @@ module.exports = {
 	login: login,
 	logout: logout,
 	register: register,
-	sessionCheck: sessionCheck
+	sessionCheck: sessionCheck,
+	countMoves: countMoves
 }
