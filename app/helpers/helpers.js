@@ -7,6 +7,7 @@ function login(un, pw){
 			password: pw
 		}
 	).then(function(data){
+		console.log(data)
 		return data.data
 	})
 }
@@ -19,11 +20,8 @@ function sessionCheck(){
 }
 
 function logout(){
-	console.log('aoisdjfioasdjfioadsjfio;asd')
 	return axios.get('http://localhost:8000/logout')
 		.then(function(data){
-			console.log('HELPERS LOGOUT')
-			console.log(data)
 			return data
 		})
 }

@@ -77,26 +77,27 @@ app.post('/login', function(req, res){
 	
 	db.get('SELECT * FROM users WHERE username = ?', username,
 		function(err, row){
-			if (err) {throw err;}
-			
-			if (row === undefined){
-				console.log('NO MATCHING')
-				res.json({
-					success:false,
-					info: null
-				})
-			} else {
-				var match = bcrypt.compareSync(password, row.password)
-				if (match){
-					console.log('YOUR PASSWORD MATCHED')
-					req.session.valid_user = true;
-					req.session.userId = row.id;
-					res.json({
-						success: true,
-						info: row
-					})	
-				}
+			if (err) {throw err;};
+
+			console.log(row);
+
+			if (row){
+					var match = bcrypt.compareSync(password, row.password)
+					if (match){
+						req.session.valid_user = true;
+						req.session.userId = row.id;
+						res.json({
+							success: true,
+							info: row
+						})	
+					} else {
+						res.json({
+							success:false,
+							info: null
+						})
+					}
 			}
+			
 		})
 })
 
