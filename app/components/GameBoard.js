@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Finish from './Finish';
+
 var styles = {
 	box: {
 		border: "2px solid black",
@@ -8,6 +10,9 @@ var styles = {
 	}, 
 	centerXO:{
 		textAlign: "center"
+	},
+	zero:{
+		display: "none"
 	}
 }
 
@@ -24,37 +29,21 @@ function Box(props){
 	)
 }
 
-function Finish(props){
-	return (
-		<h1>{props.data}</h1>
-	)
-}
-
 function GameComponent(props){
 	return(
-		<div>
-			{props.data.finish === "" ? 
-				<div className='row'>
-					{props.data.boxIdx.map(function(state){
-						return <Box 
-							idx={state} 
-							onUserMove={props.onUserMove}/>
-					})}
-				</div>
+			<div className='row'>
+				{props.data.boxIdx.map(function(state){
+					return <Box 
+						idx={state} 
+						onUserMove={props.onUserMove}/>
+				})}
 				
-			: 
-				<div className='row'>
-					
-					{props.data.boxIdx.map(function(state){
-						return <Box 
-							idx={state} 
-							onUserMove={props.onUserMove}/>
-					})}
-					<Finish data={props.data.finish}/>
-				</div>
-		}
-		</div>
-
+				{props.data.finish === "" ? 
+					<div style={styles.zero}></div>	
+				: 
+					<Finish data={props.data.finish} onChangeFinish={props.onChangeFinish}/>
+				}
+			</div>
 	)
 }
 

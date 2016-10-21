@@ -158,13 +158,20 @@ const GameContainer = React.createClass({
 				})
 			}.bind(this))
 	},
+	handleChangeFinish(event){
+		this.setState({finish: ""})
+	},
 	render(){
 		return (
 			<div>
-				{this.state.start === true ? <GameBoard
-				data={this.state}
-				onUserMove={this.handleUserMove}/>
-				: <Heading name={this.state.username}/>}
+				{this.state.start === true ? 
+					<GameBoard
+						data={this.state}
+						onUserMove={this.handleUserMove}
+						onChangeFinish = {this.handleChangeFinish}/>
+					: 
+					<Heading name={this.state.username}/>
+				}
 				<GameMenu
 					data = {this.state}
 					onStart = {this.handleStart}
