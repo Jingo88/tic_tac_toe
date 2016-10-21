@@ -10,9 +10,29 @@ var styles = {
 	}
 }
 
+function Leader(props){
+	const {username, wins, losses, ties} = props.data;
+
+	return(
+		<li>{username}: {wins} W | {losses} L | {ties} D</li>
+	)
+}
+
+function Leaderboard(props){
+	let arrKeys = Object.keys(props.leaders)
+	return(
+		<ul>
+			{arrKeys.map(function(key){
+				return <Leader data={props.leaders[key]}/>
+			})}
+		</ul>
+	)
+}
+
 function GameMenu(props){
-	const {start, username, wins, losses, ties} = props.data
-	const {onStart, onReset, onEnd, onLogOut} = props
+	const {start, username, wins, losses, ties, leaders} = props.data;
+	const {onStart, onReset, onEnd, onLogOut} = props;
+
 	return (
 		<div>
 			{start === true ? 
@@ -37,13 +57,21 @@ function GameMenu(props){
 				:
 				
 				<div className="col s12" style={styles.center}>
-
-					<h5>Your Record Is:</h5>
-					<ul>
-						<li>Wins: {wins}</li>
-						<li>Losses: {losses}</li>
-						<li>Ties: {ties}</li>
-					</ul>
+					<div className="row">
+						<div className="col s6">
+							<h5>Your Record Is:</h5>
+							<ul>
+								<li>Wins: {wins}</li>
+								<li>Losses: {losses}</li>
+								<li>Ties: {ties}</li>
+							</ul>
+						</div>
+						
+						<div className="col s6">
+							<h5> Leaderboard Standings </h5>
+							<Leaderboard leaders={leaders}/>
+						</div>
+					</div>
 					
 					<div className = "row">
 						<button onClick = {onStart} className="col s3 waves-effect waves-light push-s1 btn-large">Start Game</button>

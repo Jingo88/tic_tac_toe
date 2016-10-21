@@ -3,7 +3,7 @@ import React from 'react';
 import GameBoard from '../components/GameBoard';
 import GameMenu from '../components/GameMenu';
 import Heading from '../components/Heading';
-import {start, updateMove, checkWin, compMove, getUserInfo, logout, countMoves} from '../helpers/helpers';
+import {start, updateMove, checkWin, compMove, getUserInfo, logout, countMoves, getLeaders} from '../helpers/helpers';
 
 const GameContainer = React.createClass({
 	contextTypes:{
@@ -24,7 +24,8 @@ const GameContainer = React.createClass({
 			ties: 0, 
 			finish: "",
 			username: "",
-			moves: 0
+			moves: 0,
+			leaders: {}
 		}
 	},
 	componentDidMount(){
@@ -47,6 +48,31 @@ const GameContainer = React.createClass({
 					moves: count
 				})
 
+			}.bind(this))
+
+			this.handleGetLeaders();
+	},
+	handleGetLeaders(){
+		getLeaders()
+			.then(function(data){
+				let tempLeaderS = {};
+				let counter = 0;
+
+				data.map(function(leader){
+					let tempLeader = {}
+
+					tempLeader["username"] = leader.username;
+					tempLeader['wins'] = leader.wins;
+					tempLeader["losses"] = leader.losses;
+					tempLeader["ties"] = leader.ties;
+
+					tempLeaderS[counter] = tempLeader;
+					counter ++;
+				})
+
+				this.setState({
+					leaders: tempLeaderS
+				})
 			}.bind(this))
 	},
 	handleUserMove(event){
@@ -74,14 +100,10 @@ const GameContainer = React.createClass({
 					wins: wins + 1,
 					moves: 0
 				})
-				console.log('YOU WONNNNN')
 
 				updateMove(userId, [[0,0,0],[0,0,0],[0,0,0]], ["00","01",'02','10','11','12','20','21','22'], wins, losses, ties)
 				
 			} else if (newMoves >=5){
-					console.log("THIS IS A TIE")
-					console.log(moves)
-
 					this.setState({
 						finish: "It's A TIE!",
 						ties: ties+1,
@@ -101,7 +123,6 @@ const GameContainer = React.createClass({
 				let compWin = checkWin(newBoard,2);
 
 				if (compWin === true){
-					console.log('YOU HAVE LOST')
 
 					this.setState({
 						finish: "YOU LOSE!",
@@ -151,7 +172,8 @@ const GameContainer = React.createClass({
 			finish: "",
 			moves: 0
 		})
-		updateMove(userId, board, boxIdx, wins, losses, ties)
+		updateMove(userId, board, boxIdx, wins, losses, ties);
+		this.handleGetLeaders();
 	},
 	handleLogOut(event){
 		logout()

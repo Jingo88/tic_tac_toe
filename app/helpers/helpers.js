@@ -37,6 +37,14 @@ function register(un, pw){
 	})
 }
 
+function getLeaders(){
+	return axios.get('http://localhost:8000/leaders')
+		.then(function(data){
+			return data.data
+		})
+}
+
+
 function getUserInfo(){
 	return axios.get('http://localhost:8000/start')
 		.then(function(data){
@@ -180,5 +188,6 @@ module.exports = {
 	logout: logout,
 	register: register,
 	sessionCheck: sessionCheck,
-	countMoves: countMoves
+	countMoves: countMoves,
+	getLeaders: getLeaders
 }

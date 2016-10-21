@@ -143,6 +143,23 @@ app.get('/start', function(req,res){
 	}
 })
 
+app.get('/leaders', function(req, res){
+		var userId = req.session.userId;
+
+	if (req.session.valid_user === true && req.session.valid_user !== undefined){
+		db.all('SELECT * FROM users ORDER BY wins DESC, ties DESC, losses DESC LIMIT 10;',
+			function(err, row){
+				if (err){throw err;}
+				console.log("WE ARE IN THE LEADERS")
+				console.log(row)
+				res.json(row)
+			}
+		)
+	} else {
+		res.redirect('/')
+	}
+})
+
 app.get('*', function(req,res){
 	res.sendFile(path.resolve(__dirname, 'app', 'index.html'))
 })
