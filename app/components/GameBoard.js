@@ -3,7 +3,11 @@ import React from 'react';
 var styles = {
 	box: {
 		border: "2px solid black",
-		height: "150px"
+		height: "150px",
+		textAlign: "center"
+	}, 
+	centerXO:{
+		textAlign: "center"
 	}
 }
 

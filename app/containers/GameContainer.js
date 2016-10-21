@@ -2,6 +2,7 @@ import React from 'react';
 
 import GameBoard from '../components/GameBoard';
 import GameMenu from '../components/GameMenu';
+import Heading from '../components/Heading';
 import {start, updateMove, checkWin, compMove, getUserInfo, logout} from '../helpers/helpers';
 
 const GameContainer = React.createClass({
@@ -159,11 +160,11 @@ const GameContainer = React.createClass({
 	},
 	render(){
 		return (
-			<div className="container">
+			<div>
 				{this.state.start === true ? <GameBoard
 				data={this.state}
 				onUserMove={this.handleUserMove}/>
-				: <h1>Tic Tac Toe</h1>}
+				: <Heading name={this.state.username}/>}
 				<GameMenu
 					data = {this.state}
 					onStart = {this.handleStart}
