@@ -2,14 +2,10 @@
     console.log("We are connected");
 
     let board = document.querySelector('.board');
-    let boardArr = [];
-
     let userForm = document.querySelector('.choice');
-
+    let boardArr = [];
     let boardSize = 0;
-
     let userName = "";
-
     let pOne = 'X';
     let pTwo = 'O';
     let currPlayer = pOne;
@@ -21,7 +17,7 @@
         
         let data = event.target
 
-        userName = document.querySelector('.choice>input[type="text"]').value;
+        userName = document.querySelector('.choice section>input[type="text"]').value;
         boardSize = document.querySelector('input[name="size"]:checked').value;
 
         createBoard(boardSize);
