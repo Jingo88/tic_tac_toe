@@ -1,0 +1,27 @@
+.guide{
+    border: 1px solid teal;
+    background-color: pink;
+}
+h1{
+    font-family: work sans,sans serif;
+    color: orange;
+    display: inline;
+}
+.startGame{
+    height:50px;
+    width: 100px;
+    background-color: white;
+    border: 1px solid teal;
+    font-family: work sans, sans serif;
+    color:orange;
+    display: inline;
+}
+.row{
+    height:50px;
+    postion: absolute;
+}
+.box{
+    height: 80px;
+    border: 1px solid teal;
+    display: inline-block;
+}
