@@ -1,0 +1,31 @@
+body{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.choice{
+	border: 2px solid papayawhip;
+	input[type=text]{
+		border: 2px solid black;
+	}
+}
+
+.board{
+	height: 50vh;
+	.row{
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		.box{
+			display: inline-block;
+		  border: 1px solid teal;
+		  height: 80px;
+		  width: 80px;
+		}
+	}	
+}
+
+
+
