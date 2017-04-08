@@ -4,14 +4,15 @@
     let board = document.querySelector('.board');
     let userForm = document.querySelector('.choice');
     let reset = document.querySelector('.reset');
+    let userInfo = document.querySelector('.info');
     let boardArr = [];
     let boardSize = 0;
-    let userName = "";
-    let pOne = 'X';
-    let pTwo = 'O';
-    let currPlayer = pOne;
+    let players = {
+        1: {userName: "", piece: "X"},
+        2: {userName: "", piece: "O"}
+    }
+    let currPlayer = players[1];
     let gameFinish = false;
-    let userInfo = document.querySelector('.info');
     let record = {
         wins: 0,
         losses: 0,
@@ -20,21 +21,23 @@
 
     userForm.addEventListener('submit', function(event){
         event.preventDefault();
-        console.log(gameFinish);
 
         if (boardArr.length !== 0 || gameFinish){return;}
 
-        if (document.querySelector('.choice section>input[type="text"]').value === ""){
-            alert("Please Enter A Name");
+        if (document.querySelector('.pOne>input[type="text"]').value === "" || document.querySelector('.pTwo>input[type="text"]').value === ""){
+            alert("Please Enter Names For Both Players");
             return;
         }
         
         let data = event.target;
 
-        if (userName !== document.querySelector('.choice section>input[type="text"]').value){
-            userName = document.querySelector('.choice section>input[type="text"]').value;    
-            userInfoCreate();
-        }
+        // if (userName !== document.querySelector('.choice section>input[type="text"]').value){
+        //     userName = document.querySelector('.choice section>input[type="text"]').value;    
+        //     userInfoCreate();
+        // }
+
+        players[1].userName = document.querySelector('.pOne>input[type="text"]').value;
+        players[2].userName = document.querySelector('.pTwo>input[type="text"]').value;
 
         boardSize = document.querySelector('input[name="size"]:checked').value;
         
@@ -42,9 +45,30 @@
     })
 
     reset.addEventListener('click', function(){
-        console.log('a;sodifjasdfio')
         resetGame()
     });
+
+    board.addEventListener('click', function(event){
+        if (boardSize === 0 || gameFinish){return;}
+
+        let el = event.target;
+
+        if (el.innerHTML === 0){return;}
+
+        let location = event.target.dataset.num.split("");
+        let row = location[0];
+        let col = location[1];
+
+        el.innerHTML = currPlayer.piece;
+        boardArr[row][col] = currPlayer.piece;
+
+        if (checkRow(row) || checkCol(col) || checkDOne() || checkDTwo()){
+            gameFinish = true;
+            alert(`CONGRATS ${currPlayer.userName} YOU WIN`)
+        }
+
+        currPlayer = currPlayer.piece === players[1].piece ? players[2] : players[1];
+    })
 
     var createBoard = function(size){
 
@@ -70,33 +94,11 @@
         }
     }
 
-    board.addEventListener('click', function(event){
-        if (boardSize === 0 || gameFinish){return;}
-
-        let el = event.target;
-
-        if (el.innerHTML === 0){return;}
-
-        let location = event.target.dataset.num.split("");
-        let row = location[0];
-        let col = location[1];
-
-        el.innerHTML = currPlayer;
-        boardArr[row][col] = currPlayer;
-
-        if (checkRow(row) || checkCol(col) || checkDOne() || checkDTwo()){
-            gameFinish = true;
-            currPlayer === pOne ? alert(`CONGRATS ${userName} YOU WIN`) : alert(`YOU LOSE!!!`)
-        }
-
-        currPlayer = currPlayer === pOne ? pTwo : pOne;
-    })
-
     var checkRow = function(row){
         var rowLen = boardArr[row].length;
 
         for (var i = 0; i<rowLen; ++i){
-            if (boardArr[row][i] !== currPlayer) {return false;}
+            if (boardArr[row][i] !== currPlayer.piece) {return false;}
         }
         return true;
     }
@@ -105,7 +107,7 @@
         var colLen = boardArr[col].length;
 
         for (var i = 0; i<colLen; ++i){
-            if (boardArr[i][col] !== currPlayer) {return false;}
+            if (boardArr[i][col] !== currPlayer.piece) {return false;}
         }
         return true;
     }
@@ -114,7 +116,7 @@
         var bLen = boardArr.length;
 
         for (var i = 0; i<bLen; ++i){
-            if(boardArr[i][i] !== currPlayer){ return false; }
+            if(boardArr[i][i] !== currPlayer.piece){ return false; }
         }
         return true;
     }
@@ -124,7 +126,7 @@
         var col = boardArr.length - 1;
 
         for (var i = 0; i<bLen; ++i){
-            if(boardArr[i][col] !== currPlayer){ return false; }
+            if(boardArr[i][col] !== currPlayer.piece){ return false; }
             col --
         }
         return true;
@@ -138,7 +140,7 @@
             console.log(board.firstChild)
             board.removeChild(board.childNodes[0]);
         }
-        currPlayer = pOne;
+        currPlayer = players[1]
         gameFinish = false;
         console.log(board)
     }
@@ -164,9 +166,3 @@
     }
 
 }());
-
-
-
-
-
-
