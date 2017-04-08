@@ -7,8 +7,10 @@ body {
 h1 {
   text-decoration: underline; }
 
+.header {
+  display: flex; }
+
 .choice {
-  border: 2px solid papayawhip;
   border-radius: 3em; }
   .choice section {
     display: flex;
@@ -19,7 +21,7 @@ h1 {
       border: 2px solid black; }
 
 .board {
-  height: 50vh; }
+  margin-top: 2em; }
   .board .row {
     width: 100%;
     display: flex;
@@ -28,6 +30,8 @@ h1 {
       display: inline-block;
       border: 1px solid teal;
       height: 80px;
-      width: 80px; }
+      width: 80px;
+      font-size: 4.5em;
+      text-align: center; }
 
 /*# sourceMappingURL=style.css.map */

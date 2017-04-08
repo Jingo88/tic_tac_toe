@@ -9,8 +9,11 @@ h1{
 	text-decoration: underline;
 }
 
+.header{
+	display: flex;
+}
+
 .choice{
-	border: 2px solid papayawhip;
 	border-radius: 3em;
 	section{
 		display: flex;
@@ -22,13 +25,13 @@ h1{
 			border: 2px solid black;
 		}	
 		input[type=submit]{
-			
+
 		}
 	}
 }
 
 .board{
-	height: 50vh;
+	margin-top: 2em;
 	.row{
 		width: 100%;
 		display: flex;
@@ -38,6 +41,8 @@ h1{
 			border: 1px solid teal;
 			height: 80px;
 			width: 80px;
+			font-size: 4.5em;
+			text-align: center;
 		}
 	}	
 }
