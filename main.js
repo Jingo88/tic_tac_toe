@@ -4,20 +4,16 @@
     let board = document.querySelector('.board');
     let userForm = document.querySelector('.choice');
     let reset = document.querySelector('.reset');
-    let userInfo = document.querySelector('.info');
+    let pOneRecord = document.querySelector('[data-player = "one"]');
+    let pTwoRecord = document.querySelector('[data-player = "two"]');
     let boardArr = [];
     let boardSize = 0;
     let players = {
-        1: {userName: "", piece: "X"},
-        2: {userName: "", piece: "O"}
-    }
+        1: {userName: "", piece: "X", wins: 0, losses: 0, ties: 0},
+        2: {userName: "", piece: "O", wins: 0, losses: 0, ties: 0}
+    };
     let currPlayer = players[1];
     let gameFinish = false;
-    let record = {
-        wins: 0,
-        losses: 0,
-        ties: 0
-    }
 
     userForm.addEventListener('submit', function(event){
         event.preventDefault();
@@ -31,17 +27,14 @@
         
         let data = event.target;
 
-        // if (userName !== document.querySelector('.choice section>input[type="text"]').value){
-        //     userName = document.querySelector('.choice section>input[type="text"]').value;    
-        //     userInfoCreate();
-        // }
-
         players[1].userName = document.querySelector('.pOne>input[type="text"]').value;
         players[2].userName = document.querySelector('.pTwo>input[type="text"]').value;
 
         boardSize = document.querySelector('input[name="size"]:checked').value;
         
-        createBoard(boardSize);        
+        createBoard(boardSize); 
+        updatePlayerOneRecord();       
+        updatePlayerTwoRecord();
     })
 
     reset.addEventListener('click', function(){
@@ -59,7 +52,7 @@
         let row = location[0];
         let col = location[1];
 
-        el.innerHTML = currPlayer.piece;
+        el.textContent = currPlayer.piece;
         boardArr[row][col] = currPlayer.piece;
 
         if (checkRow(row) || checkCol(col) || checkDOne() || checkDTwo()){
@@ -145,24 +138,46 @@
         console.log(board)
     }
 
-    var userInfoCreate = function(){
+    var updatePlayerOneRecord = function(){
+        pOneRecord.style.display = "block";
+
         let h3 = document.createElement('h3')
-        h3.innerHTML = "Welcome! " + userName;
+        h3.innerHTML = "Welcome! " + players[1].userName;
 
         let wins = document.createElement("h5")
-        wins.innerHTML = "Wins: " + record.wins;
+        wins.innerHTML = "Wins: " + players[1].wins;
 
         let losses = document.createElement("h5")
-        losses.innerHTML = "Losses: " + record.losses;
+        losses.innerHTML = "Losses: " + players[1].losses;
 
         let ties = document.createElement("h5")
-        ties.innerHTML = "Ties: " + record.ties;
+        ties.innerHTML = "Ties: " + players[1].ties;
 
+        pOneRecord.appendChild(h3);
+        pOneRecord.appendChild(wins);
+        pOneRecord.appendChild(losses);
+        pOneRecord.appendChild(ties);
+    }
 
-        userInfo.appendChild(h3);
-        userInfo.appendChild(wins);
-        userInfo.appendChild(losses);
-        userInfo.appendChild(ties);
+    var updatePlayerTwoRecord = function(){
+        pTwoRecord.style.display = "block";
+
+        let h3 = document.createElement('h3')
+        h3.innerHTML = "Welcome! " + players[2].userName;
+
+        let wins = document.createElement("h5")
+        wins.innerHTML = "Wins: " + players[2].wins;
+
+        let losses = document.createElement("h5")
+        losses.innerHTML = "Losses: " + players[2].losses;
+
+        let ties = document.createElement("h5")
+        ties.innerHTML = "Ties: " + players[2].ties;
+
+        pTwoRecord.appendChild(h3);
+        pTwoRecord.appendChild(wins);
+        pTwoRecord.appendChild(losses);
+        pTwoRecord.appendChild(ties);
     }
 
 }());

@@ -11,6 +11,11 @@ h1{
 
 .header{
 	display: flex;
+	justify-content: space-around;
+	width: 80%;
+	.record[data-player="one"], .record[data-player="two"]{
+		display: none;
+	}
 }
 
 .choice{
@@ -23,6 +28,7 @@ h1{
 		}
 		input[type=text]{
 			border: 2px solid black;
+			padding-left: 1em;
 		}	
 		input[type=submit]{
 

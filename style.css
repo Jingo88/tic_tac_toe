@@ -8,7 +8,11 @@ h1 {
   text-decoration: underline; }
 
 .header {
-  display: flex; }
+  display: flex;
+  justify-content: space-around;
+  width: 80%; }
+  .header .record[data-player="one"], .header .record[data-player="two"] {
+    display: none; }
 
 .choice {
   border-radius: 3em; }
@@ -18,7 +22,8 @@ h1 {
     .choice section p {
       margin: 0px 2em 0px 0px; }
     .choice section input[type=text] {
-      border: 2px solid black; }
+      border: 2px solid black;
+      padding-left: 1em; }
 
 .board {
   margin-top: 2em; }
